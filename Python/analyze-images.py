@@ -63,7 +63,6 @@ for file in files:
         response = client.text_detection(image=image_object)
         # Ref: https://googleapis.dev/python/vision/latest/gapic/v1/api.html#google.cloud.vision_v1.ImageAnnotatorClient.document_text_detection
 
-    
         # Save the text content found by the vision API into a variable called text_data
         text_data = response.text_annotations[0].description
 
