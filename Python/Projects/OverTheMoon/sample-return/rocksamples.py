@@ -45,3 +45,25 @@ sample_payload_ratio = missions['Sample : Payload'].mean()
 print(crewedArea_payload_ratio)
 print(sample_crewedArea_ratio)
 print(sample_payload_ratio)
+
+artemis_crewedArea = 26520
+artemis_mission = pd.DataFrame({'Mission':['artemis1','artemis1b','artemis2'],
+                                 'Total weight (kg)':[artemis_crewedArea,artemis_crewedArea,artemis_crewedArea],
+                                 'Payload (kg)':[26988, 37965, 42955]})
+artemis_mission
+artemis_mission['Sample weight from total (kg)'] = artemis_mission['Total weight (kg)'] * sample_crewedArea_ratio
+artemis_mission['Sample weight from payload (kg)'] = artemis_mission['Payload (kg)'] * sample_payload_ratio
+artemis_mission
+artemis_mission['Estimated sample weight (kg)'] = (artemis_mission['Sample weight from payload (kg)'] + artemis_mission['Sample weight from total (kg)'])/2
+artemis_mission
+rock_samples['Remaining (kg)'] = rock_samples['Weight (kg)'] * (rock_samples['Pristine (%)'] * .01)
+rock_samples.head()
+rock_samples.describe()
+low_samples = rock_samples.loc[(rock_samples['Weight (kg)'] >= .16) & (rock_samples['Pristine (%)'] <= 50)]
+low_samples.head()
+low_samples.info()
+low_samples.Type.unique()
+rock_samples.Type.unique()
+low_samples.groupby('Type')['Weight (kg)'].count()
+needed_samples = low_samples[low_samples['Type'].isin(['Basalt', 'Breccia'])]
+needed_samples.info()
