@@ -86,6 +86,25 @@ def predict_best_meteor_shower_viewing(city):
         meteor_shower_enddate = meteor_showers.loc[meteor_showers['radiant'] == constellation, 'enddate'].iloc[0]
 
 
+        # Find the moon phases for each date within the viewable timeframe of that meteor shower
+        moon_phases_list = moon_phases.loc[(moon_phases['date'] >= meteor_shower_startdate) & (moon_phases['date'] <= meteor_shower_enddate)]
+
+        if meteor_shower == 'Chang\'e':
+            # For the film meteor shower, find the date where the moon is the most visible
+            best_moon_date = moon_phases_list.loc[moon_phases_list['percentage'].idxmax()]['date']
+
+            # Add that date to the string to report back to the user
+            meteor_shower_string += "Though the moon will be bright, the " + meteor_shower + " is best seen if you look towards the " + constellation + " constellation on " +  best_moon_date.to_pydatetime().strftime("%B %d, %Y") + ".\n"
+        else:
+            # Find the first date where the moon is the least visible
+            best_moon_date = moon_phases_list.loc[moon_phases_list['percentage'].idxmin()]['date']
+
+            # Add that date to the string to report back to the user
+            meteor_shower_string += meteor_shower + " is best seen if you look towards the " + constellation + " constellation on " +  best_moon_date.to_pydatetime().strftime("%B %d, %Y") + ".\n"
+    
+    return meteor_shower_string
+  
+  print(predict_best_meteor_shower_viewing('Beijing'))
 
 
 
