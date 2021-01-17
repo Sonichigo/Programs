@@ -54,6 +54,37 @@ else:
     print('not here')
 
 
+def predict_best_meteor_shower_viewing(city):
+    # Create an empty string to return the message back to the user
+    meteor_shower_string = ""
+
+    if city not in cities.values:
+        meteor_shower_string = "Unfortunately, " + city + " isn't available for a prediction at this time."
+        return meteor_shower_string
+
+    # Get the latitude of the city from the cities dataframe
+    latitude = cities.loc[cities['city'] == city, 'latitude'].iloc[0]
+
+    # Get the list of constellations that are viewable from that latitude
+    constellation_list = constellations.loc[(constellations['latitudestart'] >= latitude) & (constellations['latitudeend'] <= latitude), 'constellation'].tolist()
+
+    # If no constrllations are viewable, let the user know
+    if not constellation_list:
+        meteor_shower_string = "Unfortunately, there are no meteor showers viewable from "+ city + "."
+
+        return meteor_shower_string
+
+    meteor_shower_string = "In " + city + " you can see the following meteor showers:\n"
+    
+    # Iterate through each constellation that is viewable from the city
+    for constellation in constellation_list:
+        # Find the meteor shower that is nearest that constellation
+        meteor_shower = meteor_showers.loc[meteor_showers['radiant'] == constellation, 'name'].iloc[0]
+
+        # Find the start and end dates for that meteor shower
+        meteor_shower_startdate = meteor_showers.loc[meteor_showers['radiant'] == constellation, 'startdate'].iloc[0]
+        meteor_shower_enddate = meteor_showers.loc[meteor_showers['radiant'] == constellation, 'enddate'].iloc[0]
+
 
 
 
